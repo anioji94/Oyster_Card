@@ -1,6 +1,9 @@
 require 'journey'
 
 describe Journey do
+	penalty = Journey::PENALTY_FARE
+	min = Journey::MINIMUM_FARE
+
 	let(:entry_station) { double :entry_station, name: :entry_station }
 	let(:exit_station) { double :exit_station, name: :exit_station }
 	# in_journey
@@ -37,7 +40,26 @@ describe Journey do
 			subject.save_exit(exit_station)
 			expect(subject.incomplete?).to be true
 		end
+		it 'should return false if both entry and exit are empty' do
+			expect(subject.incomplete?).to be false
+		end
+		it 'should return false if neither entry and exit are empty' do
+			subject.save_entry(entry_station)
+			subject.save_exit(exit_station)
+			expect(subject.incomplete?).to be false
+		end
+	end
 
+	describe '#fare' do
+		it 'returns penalty if journey incomplete' do
+			subject.save_entry(entry_station)
+			expect(subject.fare).to eq penalty
+		end
+		it 'returns min_fare if journey complete' do
+			subject.save_entry(entry_station)
+			subject.save_exit(exit_station)
+			expect(subject.fare).to eq min
+		end
 	end
 
 end

@@ -1,4 +1,7 @@
 class Journey
+	PENALTY_FARE = 6
+	MINIMUM_FARE = 1
+
 	attr_reader :exit_station, :entry_station
 
 	def initialize
@@ -16,6 +19,10 @@ class Journey
 
 	def incomplete?
 		(!@entry_station && !!@exit_station) || (!!@entry_station && !@exit_station) ? true : false
+	end
+
+	def fare
+		incomplete? ? PENALTY_FARE : MINIMUM_FARE
 	end
 
 end
