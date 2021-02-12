@@ -1,3 +1,5 @@
+require_relative 'station.rb'
+
 class OysterCard
   attr_reader :balance, :limit, :entry_station, :exit_station, :card_history
 
@@ -19,14 +21,14 @@ class OysterCard
       end
   end
 
-  def touch_in(station)
+  def touch_in(station = Station.new)
     raise "Insufficient funds" if @balance < MIN_TRAVEL_BALANCE
-    @entry_station = station
+    @entry_station = station.name
   end
 
-  def touch_out(station)
+  def touch_out(station = Station.new)
 		deduct(MIN_FARE)
-		@exit_station = station
+		@exit_station = station.name
     @card_history << {entry: entry_station, exit: exit_station}
 		@entry_station = nil
   end
